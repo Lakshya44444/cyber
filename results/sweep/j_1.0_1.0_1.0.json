@@ -10,6 +10,11 @@
       "ham": 1931,
       "spam": 181
     },
+    "sim_knobs": {
+      "signal": 1.0,
+      "share": 1.0,
+      "hard": 1.0
+    },
     "payment_events": 161311,
     "scam_payment_events": 8699,
     "shared_messages": 25813,
@@ -280,7 +285,7 @@
     "digital_arrest": 1.0,
     "kyc_scam": 0.9302325581395349
   },
-  "latency_ms_per_decision": 2.848995003333433,
+  "latency_ms_per_decision": 2.6704426899997693,
   "examples": [
     {
       "truth": "scam",

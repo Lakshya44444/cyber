@@ -85,3 +85,45 @@ fig.suptitle("Scammer tricks vs the input guard (real smishing SMS)", x=0.02, ha
 fig.text(0.0, -0.06, "Prompt injection → 100% because a detected injection can only raise risk.", fontsize=9.5, color=INK2)
 save(fig, "fig_robustness")
 print("ok")
+
+# 4. external Indian validation (never trained on Indian scam messages)
+import os
+if os.path.exists("results/external.json"):
+    X = json.load(open("results/external.json"))["results"]
+    conds = [("a_base", "Public\ndata only"), ("b_recalibrate", "+ recali-\nbration"),
+             ("c_retrain_recalibrate", "+ bank\nnegatives"), ("d_plus_synthetic_india", "+ India\ntemplates")]
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.0))
+    for ax, key, title in [(axes[0], "scam_recall_all", "Indian scam probes caught"),
+                           (axes[1], "indian_benign_false_alert", "False alerts on Indian SMS traffic")]:
+        vals = [X[c][key] * 100 for c, _ in conds]
+        cols = [BLUE if c.startswith("d") else GRAY for c, _ in conds]
+        bars = ax.bar([l for _, l in conds], vals, color=cols, width=.62)
+        for b, v in zip(bars, vals):
+            ax.text(b.get_x() + b.get_width() / 2, v + max(vals) * .03, f"{v:.0f}%" if v >= 10 else f"{v:.1f}%",
+                    ha="center", fontsize=12, color=NAVY, fontweight="bold")
+        if key.endswith("false_alert"):
+            ax.axhline(2, color=ORANGE, ls="--", lw=1.5); ax.text(1.0, 4.6, "dashed = 2% budget", color=ORANGE, fontsize=10.5)
+        ax.set_title(title, loc="left", fontsize=13, color=NAVY, fontweight="bold")
+        ax.tick_params(axis="x", labelsize=10.5); ax.set_ylim(0, max(vals) * 1.25)
+    fig.text(0.0, -0.05, "Mean of 10 splits. Probes: 103 Indian scams + 47 legitimate look-alikes (English, Hinglish, Hindi). "
+             "Traffic: IIIT-D 2011 + Indian Telecom 2024.", fontsize=9, color=INK2)
+    save(fig, "fig_external_india")
+
+# 5. sensitivity sweep
+if os.path.exists("results/sensitivity.json"):
+    S = json.load(open("results/sensitivity.json"))["grid"]
+    fig, ax = plt.subplots(figsize=(7.6, 4.2))
+    order2 = ["ScamTrail (full)", "ScamTrail without journey state", "Payment-only model", "RBI rule (new payee > ₹10k)", "Single-SMS classifier"]
+    lab2 = ["ScamTrail (full)", "ScamTrail, no journey", "Payment-only", "Blanket rule*", "Single-SMS"]
+    for i, (m, l) in enumerate(zip(order2, lab2)):
+        v = [r["recall"][m] * 100 for r in S]
+        ax.plot([min(v), max(v)], [i, i], color=BLUE if i == 0 else GRAY, lw=8, solid_capstyle="round", alpha=.85)
+        ax.text(max(v) + 1.5, i, f"{min(v):.0f}–{max(v):.0f}%", va="center", fontsize=11, color=NAVY, fontweight="bold")
+    ax.set_yticks(range(len(lab2))); ax.set_yticklabels(lab2); ax.invert_yaxis(); ax.set_xlim(0, 110)
+    ax.set_xlabel("Scam payments caught across 18 simulator settings (%)")
+    ax.set_title("Ranking holds when we make the simulator harder", loc="left", fontsize=14, color=NAVY, fontweight="bold")
+    ax.tick_params(axis="y", length=0)
+    fig.text(0.0, -0.06, "Scam signals ×1 / 0.7 / 0.5, shared messages ×1 / 0.5 / 0, hard negatives ×1 / 2. *Blanket rule at its own 5% budget.",
+             fontsize=9, color=INK2)
+    save(fig, "fig_sensitivity")
+print("ok2")

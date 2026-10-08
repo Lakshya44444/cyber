@@ -1,0 +1,401 @@
+{
+  "setup": {
+    "users": 16000,
+    "scam_user_share_in_sim": 0.15,
+    "alpha_T1": 0.1,
+    "alpha_T2": 0.02,
+    "alpha_T3": 0.005,
+    "held_out_texts_used_in_journeys": {
+      "smishing": 218,
+      "ham": 1931,
+      "spam": 181
+    },
+    "sim_knobs": {
+      "signal": 0.5,
+      "share": 0.0,
+      "hard": 1.0
+    },
+    "payment_events": 160639,
+    "scam_payment_events": 8437,
+    "shared_messages": 24693,
+    "adversarial_messages": 0
+  },
+  "methods": {
+    "RBI rule (new payee > \u20b910k)": {
+      "scam_payment_recall": 0.1527403414195867,
+      "scam_rupees_covered": 0.33007113901794083,
+      "false_alert_rate_genuine": 0.049644830307813734,
+      "false_alert_rate_hard_negatives": 0.8404624277456647,
+      "scam_journeys_flagged": 0.4435483870967742,
+      "false_alert_by_group": {
+        "18-35|en": 0.041469194312796206,
+        "18-35|hi": 0.04807400667273279,
+        "36-59|en": 0.04280106369507408,
+        "36-59|hi": 0.04964747356051704,
+        "60+|en": 0.06252658443215653,
+        "60+|hi": 0.07004763239002522
+      },
+      "subgroup_gap_pts": 2.8578438077229014
+    },
+    "Single-SMS classifier": {
+      "scam_payment_recall": 0.0022461814914645105,
+      "scam_rupees_covered": 0.001729488624845799,
+      "false_alert_rate_genuine": 0.002183635885293344,
+      "false_alert_rate_hard_negatives": 0.0017341040462427746,
+      "scam_journeys_flagged": 0.008064516129032258,
+      "false_alert_by_group": {
+        "18-35|en": 0.0014218009478672985,
+        "18-35|hi": 0.0022747952684258415,
+        "36-59|en": 0.0022793465873116375,
+        "36-59|hi": 0.002790834312573443,
+        "60+|en": 0.0017014036580178648,
+        "60+|hi": 0.0030820958251611096
+      },
+      "subgroup_gap_pts": 0.16602948772938111
+    },
+    "Payment-only model": {
+      "scam_payment_recall": 0.4797843665768194,
+      "scam_rupees_covered": 0.7562362458308208,
+      "false_alert_rate_genuine": 0.01791633780584057,
+      "false_alert_rate_hard_negatives": 0.055491329479768786,
+      "scam_journeys_flagged": 0.8467741935483871,
+      "false_alert_by_group": {
+        "18-35|en": 0.017298578199052134,
+        "18-35|hi": 0.015771913861085837,
+        "36-59|en": 0.0182347726984931,
+        "36-59|hi": 0.019388954171562868,
+        "60+|en": 0.021692896639727774,
+        "60+|hi": 0.014850098066685346
+      },
+      "subgroup_gap_pts": 0.6842798573042428
+    },
+    "ScamTrail without journey state": {
+      "scam_payment_recall": 0.5907457322551662,
+      "scam_rupees_covered": 0.8418824563255003,
+      "false_alert_rate_genuine": 0.01791633780584057,
+      "false_alert_rate_hard_negatives": 0.08554913294797688,
+      "scam_journeys_flagged": 0.9241935483870968,
+      "false_alert_by_group": {
+        "18-35|en": 0.016824644549763033,
+        "18-35|hi": 0.017743403093721567,
+        "36-59|en": 0.0182347726984931,
+        "36-59|hi": 0.01836075205640423,
+        "60+|en": 0.019140791152700978,
+        "60+|hi": 0.017652003362286353
+      },
+      "subgroup_gap_pts": 0.2316146602937944
+    },
+    "ScamTrail (full)": {
+      "scam_payment_recall": 0.8454627133872417,
+      "scam_rupees_covered": 0.9565243825163489,
+      "false_alert_rate_genuine": 0.02183635885293344,
+      "false_alert_rate_hard_negatives": 0.051445086705202314,
+      "scam_journeys_flagged": 0.9741935483870968,
+      "false_alert_by_group": {
+        "18-35|en": 0.01848341232227488,
+        "18-35|hi": 0.024719441916894146,
+        "36-59|en": 0.019627706724072432,
+        "36-59|hi": 0.02217978848413631,
+        "60+|en": 0.02467035304125904,
+        "60+|hi": 0.024936957130848977
+      },
+      "subgroup_gap_pts": 0.6453544808574095
+    }
+  },
+  "decision": {
+    "scam_payment_recall": 0.1316262353998203,
+    "scam_rupees_covered": 0.26420288726117164,
+    "false_alert_rate_genuine": 0.002709813207050776,
+    "false_alert_rate_hard_negatives": 0.020809248554913295,
+    "scam_journeys_flagged": 0.3741935483870968,
+    "false_alert_by_group": {
+      "18-35|en": 0.0022511848341232226,
+      "18-35|hi": 0.002881407340006066,
+      "36-59|en": 0.0025326073192351527,
+      "36-59|hi": 0.0026439482961222094,
+      "60+|en": 0.0029774564015312634,
+      "60+|hi": 0.0036424768842813113
+    },
+    "subgroup_gap_pts": 0.1391292050158089
+  },
+  "ablations": {
+    "full decision (Mondrian + two-family)": {
+      "scam_payment_recall": 0.1316262353998203,
+      "scam_rupees_covered": 0.26420288726117164,
+      "false_alert_rate_genuine": 0.002709813207050776,
+      "false_alert_rate_hard_negatives": 0.020809248554913295,
+      "scam_journeys_flagged": 0.3741935483870968,
+      "false_alert_by_group": {
+        "18-35|en": 0.0022511848341232226,
+        "18-35|hi": 0.002881407340006066,
+        "36-59|en": 0.0025326073192351527,
+        "36-59|hi": 0.0026439482961222094,
+        "60+|en": 0.0029774564015312634,
+        "60+|hi": 0.0036424768842813113
+      },
+      "subgroup_gap_pts": 0.1391292050158089
+    },
+    "no_mondrian (one global threshold)": {
+      "scam_payment_recall": 0.1316262353998203,
+      "scam_rupees_covered": 0.26444538579584703,
+      "false_alert_rate_genuine": 0.0027361220731386476,
+      "false_alert_rate_hard_negatives": 0.020809248554913295,
+      "scam_journeys_flagged": 0.3741935483870968,
+      "false_alert_by_group": {
+        "18-35|en": 0.0022511848341232226,
+        "18-35|hi": 0.002881407340006066,
+        "36-59|en": 0.00265923768519691,
+        "36-59|hi": 0.0026439482961222094,
+        "60+|en": 0.0029774564015312634,
+        "60+|hi": 0.0036424768842813113
+      },
+      "subgroup_gap_pts": 0.1391292050158089
+    },
+    "no_two_family_rule": {
+      "scam_payment_recall": 0.8468104222821204,
+      "scam_rupees_covered": 0.9566547830563432,
+      "false_alert_rate_genuine": 0.022073138647724283,
+      "false_alert_rate_hard_negatives": 0.05260115606936416,
+      "scam_journeys_flagged": 0.9758064516129032,
+      "false_alert_by_group": {
+        "18-35|en": 0.018957345971563982,
+        "18-35|hi": 0.025629360024264483,
+        "36-59|en": 0.01709509940483728,
+        "36-59|hi": 0.02438307873090482,
+        "60+|en": 0.02552105487026797,
+        "60+|hi": 0.024936957130848977
+      },
+      "subgroup_gap_pts": 0.8534260619427202
+    },
+    "mondrian_only (no two-family)": {
+      "scam_payment_recall": 0.8468104222821204,
+      "scam_rupees_covered": 0.9566547830563432,
+      "false_alert_rate_genuine": 0.022073138647724283,
+      "false_alert_rate_hard_negatives": 0.05260115606936416,
+      "scam_journeys_flagged": 0.9758064516129032,
+      "false_alert_by_group": {
+        "18-35|en": 0.018957345971563982,
+        "18-35|hi": 0.025629360024264483,
+        "36-59|en": 0.01709509940483728,
+        "36-59|hi": 0.02438307873090482,
+        "60+|en": 0.02552105487026797,
+        "60+|hi": 0.024936957130848977
+      },
+      "subgroup_gap_pts": 0.8534260619427202
+    },
+    "two-family rule only for T3 holds": {
+      "scam_payment_recall": 0.8468104222821204,
+      "scam_rupees_covered": 0.9566547830563432,
+      "false_alert_rate_genuine": 0.022073138647724283,
+      "false_alert_rate_hard_negatives": 0.05260115606936416,
+      "scam_journeys_flagged": 0.9758064516129032,
+      "false_alert_by_group": {
+        "18-35|en": 0.018957345971563982,
+        "18-35|hi": 0.025629360024264483,
+        "36-59|en": 0.01709509940483728,
+        "36-59|hi": 0.02438307873090482,
+        "60+|en": 0.02552105487026797,
+        "60+|hi": 0.024936957130848977
+      },
+      "subgroup_gap_pts": 0.8534260619427202
+    },
+    "global_only (no two-family)": {
+      "scam_payment_recall": 0.8454627133872417,
+      "scam_rupees_covered": 0.9565243825163489,
+      "false_alert_rate_genuine": 0.02183635885293344,
+      "false_alert_rate_hard_negatives": 0.051445086705202314,
+      "scam_journeys_flagged": 0.9741935483870968,
+      "false_alert_by_group": {
+        "18-35|en": 0.01848341232227488,
+        "18-35|hi": 0.024719441916894146,
+        "36-59|en": 0.019627706724072432,
+        "36-59|hi": 0.02217978848413631,
+        "60+|en": 0.02467035304125904,
+        "60+|hi": 0.024936957130848977
+      },
+      "subgroup_gap_pts": 0.6453544808574095
+    },
+    "no messages shared at all": {
+      "scam_payment_recall": 0.1320754716981132,
+      "scam_rupees_covered": 0.2632678880782641,
+      "false_alert_rate_genuine": 0.0034990791896869246,
+      "false_alert_rate_hard_negatives": 0.030635838150289016,
+      "scam_journeys_flagged": 0.3758064516129032,
+      "false_alert_by_group": {
+        "18-35|en": 0.003080568720379147,
+        "18-35|hi": 0.004852896572641796,
+        "36-59|en": 0.0035456502469292136,
+        "36-59|hi": 0.002790834312573443,
+        "60+|en": 0.0031901318587834963,
+        "60+|hi": 0.0036424768842813113
+      },
+      "subgroup_gap_pts": 0.20620622600683527
+    }
+  },
+  "holds_T3": {
+    "two_family_all_tiers": {
+      "scam_payment_recall": 0.12174303683737646,
+      "scam_rupees_covered": 0.25452632340141024,
+      "false_alert_rate_genuine": 0.0007629571165482768,
+      "false_alert_rate_hard_negatives": 0.006358381502890174,
+      "scam_journeys_flagged": 0.3580645161290323,
+      "false_alert_by_group": {
+        "18-35|en": 0.0009478672985781991,
+        "18-35|hi": 0.0006066120715802245,
+        "36-59|en": 0.0003798910978852729,
+        "36-59|hi": 0.0007344300822561692,
+        "60+|en": 0.0014887282007656317,
+        "60+|hi": 0.0005603810591202018
+      },
+      "subgroup_gap_pts": 0.11088371028803588
+    },
+    "two_family_T3_only": {
+      "scam_payment_recall": 0.12174303683737646,
+      "scam_rupees_covered": 0.25452632340141024,
+      "false_alert_rate_genuine": 0.0007629571165482768,
+      "false_alert_rate_hard_negatives": 0.006358381502890174,
+      "scam_journeys_flagged": 0.3580645161290323,
+      "false_alert_by_group": {
+        "18-35|en": 0.0009478672985781991,
+        "18-35|hi": 0.0006066120715802245,
+        "36-59|en": 0.0003798910978852729,
+        "36-59|hi": 0.0007344300822561692,
+        "60+|en": 0.0014887282007656317,
+        "60+|hi": 0.0005603810591202018
+      },
+      "subgroup_gap_pts": 0.11088371028803588
+    }
+  },
+  "tier_distribution": {
+    "genuine": {
+      "T0": 0.9030255196001052,
+      "T1": 0.09426466719284399,
+      "T2": 0.0019468560905024994,
+      "T3": 0.0007629571165482768
+    },
+    "scam": {
+      "T0": 0.07547169811320754,
+      "T1": 0.7929020664869721,
+      "T2": 0.009883198562443846,
+      "T3": 0.12174303683737646
+    }
+  },
+  "recall_by_scam_type": {
+    "task_scam": 0.10794896957801767,
+    "digital_arrest": 0.4533333333333333,
+    "kyc_scam": 0.34513274336283184
+  },
+  "latency_ms_per_decision": 1.9739133899990218,
+  "examples": [
+    {
+      "truth": "scam",
+      "type": "task_scam",
+      "hard_negative": "",
+      "tier": 3,
+      "amount": 19367,
+      "reasons": [
+        "on_call"
+      ],
+      "families": [
+        "call",
+        "payment"
+      ],
+      "shown": "You are on a call while paying. Please pause and check before you pay.",
+      "guard_violations": []
+    },
+    {
+      "truth": "scam",
+      "type": "task_scam",
+      "hard_negative": "",
+      "tier": 3,
+      "amount": 4628,
+      "reasons": [
+        "on_call"
+      ],
+      "families": [
+        "call",
+        "intel"
+      ],
+      "shown": "You are on a call while paying. Please pause and check before you pay.",
+      "guard_violations": []
+    },
+    {
+      "truth": "scam",
+      "type": "task_scam",
+      "hard_negative": "",
+      "tier": 3,
+      "amount": 101577,
+      "reasons": [],
+      "families": [
+        "intel",
+        "payment"
+      ],
+      "shown": " Please pause and check before you pay.",
+      "guard_violations": [
+        "not_grounded"
+      ]
+    },
+    {
+      "truth": "scam",
+      "type": "task_scam",
+      "hard_negative": "relative_with_son_on_call",
+      "tier": 3,
+      "amount": 27153,
+      "reasons": [
+        "on_call",
+        "amount_high"
+      ],
+      "families": [
+        "call",
+        "journey",
+        "payment"
+      ],
+      "shown": "You are on a call while paying. The amount is much higher than your usual payments. Please pause and check before you pay.",
+      "guard_violations": []
+    },
+    {
+      "truth": "genuine",
+      "type": "genuine",
+      "hard_negative": "rent_deposit_new_landlord",
+      "tier": 2,
+      "amount": 165124,
+      "reasons": [
+        "repeat_loop",
+        "amount_high"
+      ],
+      "families": [
+        "journey",
+        "payment"
+      ],
+      "shown": "You have made several growing payments to different UPI IDs this week. The amount is much higher than your usual payments. Please pause and check before you pay.",
+      "guard_violations": []
+    },
+    {
+      "truth": "genuine",
+      "type": "genuine",
+      "hard_negative": "registered_broker",
+      "tier": 2,
+      "amount": 5611,
+      "reasons": [
+        "repeat_loop",
+        "amount_high"
+      ],
+      "families": [
+        "journey",
+        "payment"
+      ],
+      "shown": "You have made several growing payments to different UPI IDs this week. The amount is much higher than your usual payments. Please pause and check before you pay.",
+      "guard_violations": []
+    }
+  ],
+  "explanation_guard": {
+    "accuses_user_contact": 1.0,
+    "good": 1.0,
+    "leaks_score": 1.0,
+    "says_safe": 1.0,
+    "threat": 1.0,
+    "too_long": 1.0,
+    "ungrounded_reason": 1.0
+  },
+  "explanation_guard_note": "'good' = share of valid explanations allowed through; others = share of bad ones blocked"
+}

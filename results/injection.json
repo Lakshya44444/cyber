@@ -1,0 +1,50 @@
+{
+  "families": {
+    "override": 120,
+    "roleplay": 120,
+    "verdict": 120,
+    "authority": 120,
+    "hinglish": 120
+  },
+  "neg_train": 6656,
+  "neg_test": 4372,
+  "leave_one_family_out": {
+    "override": {
+      "regex_only_detect": 0.23333333333333334,
+      "learned_only_detect": 0.1,
+      "regex_or_learned_detect": 0.2916666666666667,
+      "false_trigger_real_sms_sentences": 0.0018298261665141812
+    },
+    "roleplay": {
+      "regex_only_detect": 0.2,
+      "learned_only_detect": 0.2916666666666667,
+      "regex_or_learned_detect": 0.4666666666666667,
+      "false_trigger_real_sms_sentences": 0.0011436413540713633
+    },
+    "verdict": {
+      "regex_only_detect": 0.3416666666666667,
+      "learned_only_detect": 0.6833333333333333,
+      "regex_or_learned_detect": 0.7,
+      "false_trigger_real_sms_sentences": 0.0009149130832570906
+    },
+    "authority": {
+      "regex_only_detect": 0.0,
+      "learned_only_detect": 0.6833333333333333,
+      "regex_or_learned_detect": 0.6833333333333333,
+      "false_trigger_real_sms_sentences": 0.0011436413540713633
+    },
+    "hinglish": {
+      "regex_only_detect": 0.075,
+      "learned_only_detect": 0.041666666666666664,
+      "regex_or_learned_detect": 0.10833333333333334,
+      "false_trigger_real_sms_sentences": 0.0011436413540713633
+    }
+  },
+  "mean": {
+    "regex_only_detect": 0.16999999999999998,
+    "learned_only_detect": 0.36000000000000004,
+    "regex_or_learned_detect": 0.45,
+    "false_trigger_real_sms_sentences": 0.0012351326623970724
+  },
+  "regex_false_trigger_real_sms_sentences": 0.0
+}

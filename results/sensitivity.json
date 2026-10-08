@@ -1,0 +1,578 @@
+{
+  "grid": [
+    {
+      "signal": 1.0,
+      "share": 1.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.3305124588622473,
+        "Single-SMS classifier": 0.08415608838740009,
+        "Payment-only model": 0.5265632346027268,
+        "ScamTrail without journey state": 0.7564645039962389,
+        "ScamTrail (full)": 0.9459332393041843
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.051476948077477526,
+        "Single-SMS classifier": 0.002096820695620266,
+        "Payment-only model": 0.0185306528975441,
+        "ScamTrail without journey state": 0.018635493932325112,
+        "ScamTrail (full)": 0.021518622388802977
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8372993912562258,
+        "Single-SMS classifier": 0.002213613724405091,
+        "Payment-only model": 0.10680686220254565,
+        "ScamTrail without journey state": 0.054233536247924735,
+        "ScamTrail (full)": 0.032097399003873824
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.5195110484250117,
+        "false_alert_rate_genuine": 0.002044400178229759,
+        "scam_journeys_flagged": 0.8797250859106529
+      }
+    },
+    {
+      "signal": 1.0,
+      "share": 1.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.31456225252969644,
+        "Single-SMS classifier": 0.07919049714034315,
+        "Payment-only model": 0.5217773867135944,
+        "ScamTrail without journey state": 0.7571491421029476,
+        "ScamTrail (full)": 0.952485701715794
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08357774936702514,
+        "Single-SMS classifier": 0.0021809430698653833,
+        "Payment-only model": 0.01985410242911935,
+        "ScamTrail without journey state": 0.02095710811962598,
+        "ScamTrail (full)": 0.020556015141259935
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8528519417475728,
+        "Single-SMS classifier": 0.00212378640776699,
+        "Payment-only model": 0.05734223300970874,
+        "ScamTrail without journey state": 0.034890776699029125,
+        "ScamTrail (full)": 0.020327669902912623
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.5129784425868896,
+        "false_alert_rate_genuine": 0.0018801233360908475,
+        "scam_journeys_flagged": 0.8764227642276423
+      }
+    },
+    {
+      "signal": 1.0,
+      "share": 0.5,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.33604336043360433,
+        "Single-SMS classifier": 0.036585365853658534,
+        "Payment-only model": 0.546973803071364,
+        "ScamTrail without journey state": 0.7520325203252033,
+        "ScamTrail (full)": 0.9417344173441734
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05077003393369877,
+        "Single-SMS classifier": 0.0020882276168102325,
+        "Payment-only model": 0.018115374575828767,
+        "ScamTrail without journey state": 0.01845471156356043,
+        "ScamTrail (full)": 0.020255807883059255
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8379603399433427,
+        "Single-SMS classifier": 0.0028328611898017,
+        "Payment-only model": 0.10254957507082153,
+        "ScamTrail without journey state": 0.036827195467422094,
+        "ScamTrail (full)": 0.029461756373937678
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.47244805781391147,
+        "false_alert_rate_genuine": 0.0012529365700861394,
+        "scam_journeys_flagged": 0.8363047001620746
+      }
+    },
+    {
+      "signal": 1.0,
+      "share": 0.5,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.3296500920810313,
+        "Single-SMS classifier": 0.03959484346224678,
+        "Payment-only model": 0.5345303867403315,
+        "ScamTrail without journey state": 0.7472375690607734,
+        "ScamTrail (full)": 0.9415285451197053
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08290427393151711,
+        "Single-SMS classifier": 0.0018745313671582105,
+        "Payment-only model": 0.021169707573106725,
+        "ScamTrail without journey state": 0.02229442639340165,
+        "ScamTrail (full)": 0.020569857535616097
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8511346444780635,
+        "Single-SMS classifier": 0.001210287443267776,
+        "Payment-only model": 0.0632375189107413,
+        "ScamTrail without journey state": 0.03751891074130106,
+        "ScamTrail (full)": 0.025416036308623297
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.47513812154696133,
+        "false_alert_rate_genuine": 0.0012746813296675831,
+        "scam_journeys_flagged": 0.837248322147651
+      }
+    },
+    {
+      "signal": 1.0,
+      "share": 0.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.3280757097791798,
+        "Single-SMS classifier": 0.0018026137899954935,
+        "Payment-only model": 0.5443893645786391,
+        "ScamTrail without journey state": 0.7399729607931501,
+        "ScamTrail (full)": 0.9315006759801713
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05140089574002708,
+        "Single-SMS classifier": 0.0020310384334965106,
+        "Payment-only model": 0.01952921570669722,
+        "ScamTrail without journey state": 0.020128111655035932,
+        "ScamTrail (full)": 0.018461618581397773
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8347245409015025,
+        "Single-SMS classifier": 0.0022259321090706734,
+        "Payment-only model": 0.12409571508069003,
+        "ScamTrail without journey state": 0.05787423483583751,
+        "ScamTrail (full)": 0.031163049526989426
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.41234790446146913,
+        "false_alert_rate_genuine": 0.0013279866680554109,
+        "scam_journeys_flagged": 0.827140549273021
+      }
+    },
+    {
+      "signal": 1.0,
+      "share": 0.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.30866999546073537,
+        "Single-SMS classifier": 0.003631411711302769,
+        "Payment-only model": 0.5242850658193373,
+        "ScamTrail without journey state": 0.734453018610985,
+        "ScamTrail (full)": 0.9346345891965502
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08389590182447863,
+        "Single-SMS classifier": 0.0021331593344542875,
+        "Payment-only model": 0.02032775365774086,
+        "ScamTrail without journey state": 0.020804577508971817,
+        "ScamTrail (full)": 0.01932391397093884
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8491249245624622,
+        "Single-SMS classifier": 0.0009052504526252263,
+        "Payment-only model": 0.06578153289076645,
+        "ScamTrail without journey state": 0.04224502112251056,
+        "ScamTrail (full)": 0.02172601086300543
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.40898774398547433,
+        "false_alert_rate_genuine": 0.001304991592842623,
+        "scam_journeys_flagged": 0.8033333333333333
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 1.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.23222060957910015,
+        "Single-SMS classifier": 0.0841799709724238,
+        "Payment-only model": 0.4929850024189647,
+        "ScamTrail without journey state": 0.6705370101596516,
+        "ScamTrail (full)": 0.8964683115626512
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05094514210178453,
+        "Single-SMS classifier": 0.002141440846001322,
+        "Payment-only model": 0.018532716457369463,
+        "ScamTrail without journey state": 0.019008592200925312,
+        "ScamTrail (full)": 0.019405155320555187
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8361925843940232,
+        "Single-SMS classifier": 0.002767017155506364,
+        "Payment-only model": 0.07636967349197565,
+        "ScamTrail without journey state": 0.06474820143884892,
+        "ScamTrail (full)": 0.047592695074709465
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.34107402031930334,
+        "false_alert_rate_genuine": 0.000978189028420357,
+        "scam_journeys_flagged": 0.7060869565217391
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 1.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.22377622377622378,
+        "Single-SMS classifier": 0.08951048951048951,
+        "Payment-only model": 0.4671328671328671,
+        "ScamTrail without journey state": 0.6564102564102564,
+        "ScamTrail (full)": 0.8951048951048951
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08178830377079205,
+        "Single-SMS classifier": 0.0024586668004716625,
+        "Payment-only model": 0.019468626909857248,
+        "ScamTrail without journey state": 0.01944353847311774,
+        "ScamTrail (full)": 0.02059760656313505
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.843155031731641,
+        "Single-SMS classifier": 0.0015110305228165609,
+        "Payment-only model": 0.04684194620731339,
+        "ScamTrail without journey state": 0.0395889996977939,
+        "ScamTrail (full)": 0.02901178603807797
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.32867132867132864,
+        "false_alert_rate_genuine": 0.0011289796532778043,
+        "scam_journeys_flagged": 0.680672268907563
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 0.5,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.21906693711967545,
+        "Single-SMS classifier": 0.0486815415821501,
+        "Payment-only model": 0.4629817444219067,
+        "ScamTrail without journey state": 0.6323529411764706,
+        "ScamTrail (full)": 0.8798174442190669
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05169406416829642,
+        "Single-SMS classifier": 0.0020085628204450554,
+        "Payment-only model": 0.01966277287383054,
+        "ScamTrail without journey state": 0.019134203710555527,
+        "ScamTrail (full)": 0.019504202124848036
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8404907975460123,
+        "Single-SMS classifier": 0.002230897936419409,
+        "Payment-only model": 0.09927495817066369,
+        "ScamTrail without journey state": 0.07863915225878416,
+        "ScamTrail (full)": 0.054099274958170664
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.2733265720081136,
+        "false_alert_rate_genuine": 0.0009514244938950262,
+        "scam_journeys_flagged": 0.627906976744186
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 0.5,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.228921124206709,
+        "Single-SMS classifier": 0.04261106074342702,
+        "Payment-only model": 0.471441523118767,
+        "ScamTrail without journey state": 0.658204895738894,
+        "ScamTrail (full)": 0.8748866727107888
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08207726093032541,
+        "Single-SMS classifier": 0.002570373328009583,
+        "Payment-only model": 0.019989019764424038,
+        "ScamTrail without journey state": 0.020463166300658815,
+        "ScamTrail (full)": 0.0205380315432222
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8451380552220888,
+        "Single-SMS classifier": 0.0024009603841536613,
+        "Payment-only model": 0.05312124849939976,
+        "ScamTrail without journey state": 0.037815126050420166,
+        "ScamTrail (full)": 0.02611044417767107
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.29827742520398914,
+        "false_alert_rate_genuine": 0.0009482930724695548,
+        "scam_journeys_flagged": 0.6448
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 0.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.21923828125,
+        "Single-SMS classifier": 0.0009765625,
+        "Payment-only model": 0.4833984375,
+        "ScamTrail without journey state": 0.6484375,
+        "ScamTrail (full)": 0.8798828125
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05247621306765768,
+        "Single-SMS classifier": 0.0021612503624047863,
+        "Payment-only model": 0.019082259297330064,
+        "ScamTrail without journey state": 0.019345826414696503,
+        "ScamTrail (full)": 0.019266756279486572
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8430071862907684,
+        "Single-SMS classifier": 0.002763957987838585,
+        "Payment-only model": 0.09397457158651189,
+        "ScamTrail without journey state": 0.06909894969596463,
+        "ScamTrail (full)": 0.046987285793255944
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.220703125,
+        "false_alert_rate_genuine": 0.0009224849107825308,
+        "scam_journeys_flagged": 0.5472027972027972
+      }
+    },
+    {
+      "signal": 0.7,
+      "share": 0.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.2295684113865932,
+        "Single-SMS classifier": 0.0018365472910927456,
+        "Payment-only model": 0.4807162534435262,
+        "ScamTrail without journey state": 0.6561065197428834,
+        "ScamTrail (full)": 0.8778696051423324
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.0806067443901216,
+        "Single-SMS classifier": 0.0026074965525886926,
+        "Payment-only model": 0.020609251598345243,
+        "ScamTrail without journey state": 0.021862855710166728,
+        "ScamTrail (full)": 0.018252475868120847
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8288721804511279,
+        "Single-SMS classifier": 0.002706766917293233,
+        "Payment-only model": 0.052030075187969926,
+        "ScamTrail without journey state": 0.042105263157894736,
+        "ScamTrail (full)": 0.022556390977443608
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.24701561065197428,
+        "false_alert_rate_genuine": 0.0008023066315657515,
+        "scam_journeys_flagged": 0.6003316749585407
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 1.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.16977777777777778,
+        "Single-SMS classifier": 0.09111111111111111,
+        "Payment-only model": 0.476,
+        "ScamTrail without journey state": 0.6231111111111111,
+        "ScamTrail (full)": 0.8546666666666667
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.051255752794214335,
+        "Single-SMS classifier": 0.00252465483234714,
+        "Payment-only model": 0.022958579881656806,
+        "ScamTrail without journey state": 0.02348454963839579,
+        "ScamTrail (full)": 0.022222222222222223
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8374215630347975,
+        "Single-SMS classifier": 0.0022818026240730175,
+        "Payment-only model": 0.0901312036508842,
+        "ScamTrail without journey state": 0.08214489446662863,
+        "ScamTrail (full)": 0.040501996577296064
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.21688888888888888,
+        "false_alert_rate_genuine": 0.0008678500986193294,
+        "scam_journeys_flagged": 0.5245098039215687
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 1.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.16574074074074074,
+        "Single-SMS classifier": 0.08657407407407407,
+        "Payment-only model": 0.4587962962962963,
+        "ScamTrail without journey state": 0.6032407407407407,
+        "ScamTrail (full)": 0.8458333333333333
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.0812084469011896,
+        "Single-SMS classifier": 0.0020123799577145478,
+        "Payment-only model": 0.021168199302035305,
+        "ScamTrail without journey state": 0.022136179534860027,
+        "ScamTrail (full)": 0.020862521333774867
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8360060514372163,
+        "Single-SMS classifier": 0.002420574886535552,
+        "Payment-only model": 0.04114977307110439,
+        "ScamTrail without journey state": 0.02027231467473525,
+        "ScamTrail (full)": 0.027534039334341905
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.20787037037037037,
+        "false_alert_rate_genuine": 0.0007896680846727972,
+        "scam_journeys_flagged": 0.5201342281879194
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 0.5,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.15743183817062445,
+        "Single-SMS classifier": 0.0426561125769569,
+        "Payment-only model": 0.4736147757255937,
+        "ScamTrail without journey state": 0.6015831134564644,
+        "ScamTrail (full)": 0.8526824978012313
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.05133264924882259,
+        "Single-SMS classifier": 0.002157497303128371,
+        "Payment-only model": 0.02068040097876707,
+        "ScamTrail without journey state": 0.021890704343936643,
+        "ScamTrail (full)": 0.021311863604072934
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8250551876379691,
+        "Single-SMS classifier": 0.0027593818984547464,
+        "Payment-only model": 0.09547461368653422,
+        "ScamTrail without journey state": 0.09657836644591611,
+        "ScamTrail (full)": 0.04690949227373068
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.1789797713280563,
+        "false_alert_rate_genuine": 0.0005788407398637093,
+        "scam_journeys_flagged": 0.4546925566343042
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 0.5,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.16339012669287897,
+        "Single-SMS classifier": 0.02927042376583661,
+        "Payment-only model": 0.4565312363477501,
+        "ScamTrail without journey state": 0.5797291393621669,
+        "ScamTrail (full)": 0.8274355613805155
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08272598441137767,
+        "Single-SMS classifier": 0.0022269460471707665,
+        "Payment-only model": 0.021560886729426056,
+        "ScamTrail without journey state": 0.022623747342848468,
+        "ScamTrail (full)": 0.021130681243040794
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8493443122903325,
+        "Single-SMS classifier": 0.001219884111009454,
+        "Payment-only model": 0.03964623360780726,
+        "ScamTrail without journey state": 0.023787740164684355,
+        "ScamTrail (full)": 0.026532479414455627
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.16339012669287897,
+        "false_alert_rate_genuine": 0.0006326551270371496,
+        "scam_journeys_flagged": 0.42038216560509556
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 0.0,
+      "hard": 1.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.1527403414195867,
+        "Single-SMS classifier": 0.0022461814914645105,
+        "Payment-only model": 0.4797843665768194,
+        "ScamTrail without journey state": 0.5907457322551662,
+        "ScamTrail (full)": 0.8454627133872417
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.049644830307813734,
+        "Single-SMS classifier": 0.002183635885293344,
+        "Payment-only model": 0.01791633780584057,
+        "ScamTrail without journey state": 0.01791633780584057,
+        "ScamTrail (full)": 0.02183635885293344
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8404624277456647,
+        "Single-SMS classifier": 0.0017341040462427746,
+        "Payment-only model": 0.055491329479768786,
+        "ScamTrail without journey state": 0.08554913294797688,
+        "ScamTrail (full)": 0.051445086705202314
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.12174303683737646,
+        "false_alert_rate_genuine": 0.0007629571165482768,
+        "scam_journeys_flagged": 0.3580645161290323
+      }
+    },
+    {
+      "signal": 0.5,
+      "share": 0.0,
+      "hard": 2.0,
+      "recall": {
+        "RBI rule (new payee > \u20b910k)": 0.1591203104786546,
+        "Single-SMS classifier": 0.0017248814144027599,
+        "Payment-only model": 0.4476067270375162,
+        "ScamTrail without journey state": 0.561880120741699,
+        "ScamTrail (full)": 0.8055196205260888
+      },
+      "false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.08333751820418822,
+        "Single-SMS classifier": 0.0022598302616381257,
+        "Payment-only model": 0.02202079043840707,
+        "ScamTrail without journey state": 0.021242404459398383,
+        "ScamTrail (full)": 0.020162707778837944
+      },
+      "hard_neg_false_alert": {
+        "RBI rule (new payee > \u20b910k)": 0.8560193587416818,
+        "Single-SMS classifier": 0.00030248033877797946,
+        "Payment-only model": 0.03569267997580157,
+        "ScamTrail without journey state": 0.02692075015124017,
+        "ScamTrail (full)": 0.03478523895946763
+      },
+      "T3_hold": {
+        "scam_payment_recall": 0.11901681759379043,
+        "false_alert_rate_genuine": 0.00047707527745693767,
+        "scam_journeys_flagged": 0.3317757009345794
+      }
+    }
+  ],
+  "summary": {
+    "settings": 18,
+    "full_is_best_learned_method": 18,
+    "full_beats_payment_only_by_pts": {
+      "min": 35.79128934885726,
+      "max": 43.07083150021997
+    },
+    "full_recall_range": [
+      0.8055196205260888,
+      0.952485701715794
+    ],
+    "payment_only_recall_range": [
+      0.4476067270375162,
+      0.546973803071364
+    ]
+  }
+}

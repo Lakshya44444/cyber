@@ -40,9 +40,18 @@ class Journey:
 
 
 class Simulator:
-    def __init__(self, scam_texts, ham_texts, spam_texts, seed=0):
+    """signal: multiplier on every scam-side signal probability (call, fast PIN,
+    remote app, reported payee, new payee, payouts). share: multiplier on the
+    chance a scam message is shared. hard: multiplier on the hard-negative rate.
+    Defaults (1, 1, 1) are the main benchmark; the sensitivity sweep varies them."""
+
+    def __init__(self, scam_texts, ham_texts, spam_texts, seed=0, signal=1.0, share=1.0, hard=1.0):
         self.r = random.Random(seed)
         self.scam_texts, self.ham_texts, self.spam_texts = scam_texts, ham_texts, spam_texts
+        self.sig, self.share, self.hard = signal, share, hard
+
+    def p(self, x):            # scaled scam-signal probability
+        return self.r.random() < min(1.0, x * self.sig)
 
     # ------------------------------------------------------------ helpers
     def _msg(self, t, pool, shared_p, adversarial_p=0.0):
@@ -112,53 +121,53 @@ class Simulator:
 
     # ------------------------------------------------------------ scam journeys
     def _task_scam(self, j: Journey):
-        r = self.r
+        r, P, sh = self.r, self.p, self.share
         t0 = r.uniform(0, 12 * 24)
         if r.random() < .5:                         # first contact often on WhatsApp: not visible
             j.events.append(Event(t0, "contact", {"unknown": True}))
-        j.events.append(self._msg(t0 + .1, self.scam_texts, .3, .3))
+        j.events.append(self._msg(t0 + .1, self.scam_texts, .3 * sh, .3))
         t = t0 + r.uniform(4, 30)
-        for _ in range(r.choice([0, 0, 1, 2, 3])):  # small payouts build trust (S3), not always
+        n_pay = r.choice([0, 0, 1, 2, 3]) if self.sig >= 1 else (r.choice([0, 0, 1, 2, 3]) if P(1.0) else 0)
+        for _ in range(n_pay):                      # small payouts build trust (S3), not always
             j.events.append(Event(t, "credit", {"amt": r.uniform(80, 600), "unknown": True}))
             t += r.uniform(2, 20)
         amt = r.uniform(800, 3000)
         for k in range(r.randint(3, 6)):            # loop S3 -> S4 with growing amounts
-            if r.random() < .35:
+            if P(.35):
                 j.events.append(Event(t - .2, "call", {"dur": r.uniform(10, 60), "unknown": True}))
             if k and r.random() < .3:
-                j.events.append(self._msg(t - 1, self.scam_texts, .3, .3))
-            j.events.append(self._pay(t, amt, new_payee=r.random() < .7, reported=r.random() < .1,
-                                      fast=r.random() < .6, scam=True))
+                j.events.append(self._msg(t - 1, self.scam_texts, .3 * sh, .3))
+            j.events.append(self._pay(t, amt, new_payee=P(.7), reported=P(.1),
+                                      fast=P(.6), scam=True))
             amt *= r.uniform(1.3, 3.0)
             t += r.uniform(6, 48)
             if t > 30 * 24:
                 break
 
     def _digital_arrest(self, j: Journey):
-        r = self.r
+        r, P, sh = self.r, self.p, self.share
         t0 = r.uniform(2 * 24, 28 * 24)
         j.events.append(Event(t0, "contact", {"unknown": True}))
         if r.random() < .3:
-            j.events.append(self._msg(t0 + .05, self.scam_texts, .35, .2))
+            j.events.append(self._msg(t0 + .05, self.scam_texts, .35 * sh, .2))
         dur = r.uniform(60, 240)
-        j.events.append(Event(t0 + .05, "call", {"dur": dur, "unknown": True, "video": True}))
+        j.events.append(Event(t0 + .05, "call", {"dur": dur, "unknown": True, "video": P(1.0)}))
         for k in range(r.randint(1, 2)):
-            j.events.append(self._pay(t0 + .5 + k * .4, j.median_amt * r.uniform(10, 60), True,
-                                      reported=r.random() < .1, fast=r.random() < .4, scam=True))
+            j.events.append(self._pay(t0 + .5 + k * .4, j.median_amt * r.uniform(10, 60), P(1.0),
+                                      reported=P(.1), fast=P(.4), scam=True))
 
     def _kyc_scam(self, j: Journey):
-        r = self.r
+        r, P, sh = self.r, self.p, self.share
         t0 = r.uniform(0, 28 * 24)
-        j.events.append(self._msg(t0, self.scam_texts, .35, .3))
+        j.events.append(self._msg(t0, self.scam_texts, .35 * sh, .3))
         if r.random() < .6:
             j.events.append(Event(t0 + .2, "contact", {"unknown": True}))
-        on_call = r.random() < .6
-        if on_call:
+        if P(.6):
             j.events.append(Event(t0 + .3, "call", {"dur": r.uniform(15, 50), "unknown": True}))
-        if r.random() < .5:
+        if P(.5):
             j.events.append(Event(t0 + .4, "app", {"remote": True}))
-        j.events.append(self._pay(t0 + .6, j.median_amt * r.uniform(2, 25), True,
-                                  reported=r.random() < .1, fast=r.random() < .5, scam=True))
+        j.events.append(self._pay(t0 + .6, j.median_amt * r.uniform(2, 25), P(1.0),
+                                  reported=P(.1), fast=P(.5), scam=True))
 
     # ------------------------------------------------------------ users
     def user(self, uid: int, scam_rate: float) -> Journey:
@@ -172,7 +181,7 @@ class Simulator:
         hard = ""
         # elderly and Hindi-first users get more "help on the phone" payments
         hn_p = .35 + (.25 if age == "60+" else 0) + (.1 if lang == "hi" else 0)
-        if r.random() < hn_p:
+        if r.random() < min(.95, hn_p * self.hard):
             w = [3 if age == "60+" else 1, 1, 3 if age == "60+" else 1, 1, .5]
             hard = r.choices(["hospital_on_family_call", "rent_deposit_new_landlord",
                               "relative_with_son_on_call", "registered_broker",

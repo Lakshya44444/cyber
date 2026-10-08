@@ -1,0 +1,116 @@
+{
+  "sizes": {
+    "mishra_train_pool": 5831,
+    "indian_benign": 4024,
+    "indian_benign_by_source_kind": {
+      "IIIT-D 2011|ham": 984,
+      "IIIT-D 2011|promo": 998,
+      "Indian Telecom 2024|ham": 1306,
+      "Indian Telecom 2024|promo": 736
+    },
+    "probes_scam": 103,
+    "probes_legit_lookalike": 47,
+    "probes_by_lang": {
+      "English|legit": 21,
+      "English|scam": 38,
+      "Hindi|legit": 3,
+      "Hindi|scam": 5,
+      "Hinglish|legit": 11,
+      "Hinglish|scam": 34,
+      "Misspelled|legit": 12,
+      "Misspelled|scam": 26
+    }
+  },
+  "alpha": 0.02,
+  "results": {
+    "a_base": {
+      "scam_recall_all": 0.30485436893203877,
+      "scam_recall_all_sd": 0.06908911407633864,
+      "scam_recall_by_lang": {
+        "Misspelled": 0.17692307692307693,
+        "Hindi": 0.02,
+        "English": 0.38421052631578945,
+        "Hinglish": 0.3558823529411764
+      },
+      "lookalike_false_alert": 0.15531914893617021,
+      "lookalike_false_alert_sd": 0.02340425531914894,
+      "indian_ham_false_alert": 0.003598373058691431,
+      "indian_ham_false_alert_sd": 0.002255450434502922,
+      "indian_promo_flag_rate": 0.1866252631597854,
+      "indian_promo_flag_rate_sd": 0.061068752112980684,
+      "indian_benign_false_alert": 0.08256745669025349,
+      "indian_benign_false_alert_sd": 0.027648496354712362,
+      "hinglish_ham_false_alert": 0.0,
+      "hinglish_ham_false_alert_sd": 0.0,
+      "mishra_recall_kept": 0.913490789486322,
+      "mishra_recall_kept_sd": 0.023714734455527044,
+      "mishra_false_alert": 0.018984575081207093,
+      "mishra_false_alert_sd": 0.0001582291863495956
+    },
+    "b_recalibrate": {
+      "scam_recall_all": 0.13689320388349513,
+      "scam_recall_all_sd": 0.02727101340813231,
+      "scam_recall_by_lang": {
+        "Misspelled": 0.0923076923076923,
+        "Hindi": 0.0,
+        "English": 0.19736842105263158,
+        "Hinglish": 0.12352941176470586
+      },
+      "lookalike_false_alert": 0.05319148936170213,
+      "lookalike_false_alert_sd": 0.021802022906297017,
+      "indian_ham_false_alert": 0.00026770012479373925,
+      "indian_ham_false_alert_sd": 0.0005707929903272068,
+      "indian_promo_flag_rate": 0.05006459118513519,
+      "indian_promo_flag_rate_sd": 0.013801493675713697,
+      "indian_benign_false_alert": 0.021746428331686534,
+      "indian_benign_false_alert_sd": 0.0063377389043366116,
+      "hinglish_ham_false_alert": 0.0,
+      "hinglish_ham_false_alert_sd": 0.0
+    },
+    "c_retrain_recalibrate": {
+      "scam_recall_all": 0.17184466019417471,
+      "scam_recall_all_sd": 0.02815533980582524,
+      "scam_recall_by_lang": {
+        "Misspelled": 0.15384615384615385,
+        "Hindi": 0.0,
+        "English": 0.29210526315789476,
+        "Hinglish": 0.07647058823529412
+      },
+      "lookalike_false_alert": 0.11063829787234043,
+      "lookalike_false_alert_sd": 0.03534733558688542,
+      "indian_ham_false_alert": 0.0013996407799404132,
+      "indian_ham_false_alert_sd": 0.0008014498843516471,
+      "indian_promo_flag_rate": 0.037348440808113795,
+      "indian_promo_flag_rate_sd": 0.014797209825612544,
+      "indian_benign_false_alert": 0.016911995124356295,
+      "indian_benign_false_alert_sd": 0.006772011664607185,
+      "hinglish_ham_false_alert": 0.0,
+      "hinglish_ham_false_alert_sd": 0.0
+    },
+    "d_plus_synthetic_india": {
+      "scam_recall_all": 0.7106796116504854,
+      "scam_recall_all_sd": 0.019320144409837273,
+      "scam_recall_by_lang": {
+        "Misspelled": 0.326923076923077,
+        "Hindi": 1.0,
+        "English": 0.6789473684210526,
+        "Hinglish": 0.9970588235294118
+      },
+      "lookalike_false_alert": 0.08723404255319148,
+      "lookalike_false_alert_sd": 0.03357390178310532,
+      "indian_ham_false_alert": 0.0022757944603218247,
+      "indian_ham_false_alert_sd": 0.001309627964078304,
+      "indian_promo_flag_rate": 0.04341111935752418,
+      "indian_promo_flag_rate_sd": 0.01579951770021812,
+      "indian_benign_false_alert": 0.020031856692358397,
+      "indian_benign_false_alert_sd": 0.007260061153838289,
+      "hinglish_ham_false_alert": 0.00459830866807611,
+      "hinglish_ham_false_alert_sd": 0.00919737670311519,
+      "mishra_recall_kept": 0.8700092522384896,
+      "mishra_recall_kept_sd": 0.03417549805405524,
+      "mishra_false_alert": 0.014436419545569418,
+      "mishra_false_alert_sd": 0.0030909305664708286
+    }
+  },
+  "note": "(a) Mishra only; (b) threshold re-set on unlabelled Indian non-scam traffic; (c) that traffic also used as training negatives; (d) plus synthetic Indian scam/look-alike templates. No Indian scam message is ever used for training or calibration. Probes = hand-written Indian scams + legitimate look-alikes."
+}

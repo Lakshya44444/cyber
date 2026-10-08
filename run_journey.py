@@ -16,7 +16,10 @@ from journey_sim import Simulator
 from message_model import MessageModel
 from tracker import (JOURNEY_FEATURES, PAYMENT_ONLY, SESSION_FEATURES, extract, families)
 
-SEED, N_USERS, SCAM_RATE = 5, 16000, 0.15
+import os
+SEED, N_USERS, SCAM_RATE = 5, int(os.environ.get("N_USERS", 16000)), 0.15
+SIM_KNOBS = {k: float(os.environ.get(k.upper(), 1.0)) for k in ("signal", "share", "hard")}
+OUT = os.environ.get("OUT", "results/journey.json")
 A1, A2, A3 = 0.10, 0.02, 0.005          # tier budgets (false-alert rate on genuine payments)
 rng = random.Random(SEED)
 R = {"setup": {"users": N_USERS, "scam_user_share_in_sim": SCAM_RATE,
@@ -32,7 +35,8 @@ pools = {k: msim.loc[msim["label"] == k, "text"].tolist() for k in ["smishing", 
 R["setup"]["held_out_texts_used_in_journeys"] = {k: len(v) for k, v in pools.items()}
 
 # ---------------------------------------------- 2. simulate journeys
-sim = Simulator(pools["smishing"], pools["ham"], pools["spam"], seed=SEED)
+sim = Simulator(pools["smishing"], pools["ham"], pools["spam"], seed=SEED, **SIM_KNOBS)
+R["setup"]["sim_knobs"] = SIM_KNOBS
 journeys = [sim.user(u, SCAM_RATE) for u in range(N_USERS)]
 msgs = [e for j in journeys for e in j.events if e.kind == "msg" and e.data["shared"]]
 attack_names = list(ATTACKS)
@@ -111,7 +115,7 @@ m, cols = fitted["ScamTrail (full)"]
 s_ca, s_te = m.predict_proba(CA[cols])[:, 1], m.predict_proba(TE[cols])[:, 1]
 
 
-def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA):
+def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA, two_family_from=2):
     groups = df["_group"].values if mondrian else np.array(["all"] * len(df))
     cgroups = cal["_group"].values if mondrian else np.array(["all"] * len(cal))
     th = {}
@@ -123,8 +127,8 @@ def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA):
     for i, (s, g) in enumerate(zip(scores, groups)):
         t1, t2, t3 = th[g]
         k = 3 if s > t3 else 2 if s > t2 else 1 if s > t1 else 0
-        if two_family and k >= 2 and len(fams[i]) < 2:
-            k = 1                        # one family alone can never trigger friction above T1
+        if two_family and k >= two_family_from and len(fams[i]) < 2:
+            k = two_family_from - 1      # one family alone can never trigger friction at/above this tier
         tier[i] = k
     return tier
 
@@ -137,6 +141,10 @@ R["ablations"] = {
     "no_two_family_rule": evaluate(tiers(s_te, TE, two_family=False) >= 2, TE),
 }
 R["ablations"]["mondrian_only (no two-family)"] = R["ablations"]["no_two_family_rule"]
+R["ablations"]["two-family rule only for T3 holds"] = evaluate(tiers(s_te, TE, two_family_from=3) >= 2, TE)
+# hold-level view: Tier 3 (payment held) is where friction is costly
+T3only = tiers(s_te, TE, two_family_from=3)
+R["holds_T3"] = {"two_family_all_tiers": evaluate(T >= 3, TE), "two_family_T3_only": evaluate(T3only >= 3, TE)}
 R["ablations"]["global_only (no two-family)"] = evaluate(tiers(s_te, TE, mondrian=False, two_family=False) >= 2, TE)
 # works without messages: user never shares anything at test time
 TEn = TE.copy()
@@ -216,7 +224,7 @@ rt = pd.DataFrame(red, columns=["case", "ok"])
 R["explanation_guard"] = {c: float(g["ok"].mean()) for c, g in rt.groupby("case")}
 R["explanation_guard_note"] = "'good' = share of valid explanations allowed through; others = share of bad ones blocked"
 
-json.dump(R, open("results/journey.json", "w"), indent=2, default=float)
+json.dump(R, open(OUT, "w"), indent=2, default=float)
 summ = {k: {kk: round(vv, 3) for kk, vv in v.items() if not isinstance(vv, dict)} for k, v in R["methods"].items()}
 print(json.dumps(R["setup"], indent=1))
 print(pd.DataFrame(summ).T.to_string())
