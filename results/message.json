@@ -1,0 +1,121 @@
+{
+  "data": {
+    "raw_rows": 5971,
+    "after_exact_dedup": 5831,
+    "templates": 5704,
+    "label_counts": {
+      "ham": 4834,
+      "smishing": 543,
+      "spam": 454
+    }
+  },
+  "cv": {
+    "naive_bayes": {
+      "precision": 0.7111111111111111,
+      "recall": 0.9429097605893186,
+      "f1": 0.8107680126682502,
+      "pr_auc": 0.9242294456254128,
+      "roc_auc": 0.9891235376389922,
+      "false_alert_rate": 0.039334341906202726
+    },
+    "logreg": {
+      "precision": 0.8308457711442786,
+      "recall": 0.9226519337016574,
+      "f1": 0.8743455497382199,
+      "pr_auc": 0.9517625424357131,
+      "roc_auc": 0.9941486405162111,
+      "false_alert_rate": 0.019288956127080183
+    },
+    "linear_svm": {
+      "precision": 0.8899253731343284,
+      "recall": 0.8784530386740331,
+      "f1": 0.8841519925857275,
+      "pr_auc": 0.9512911726520688,
+      "roc_auc": 0.9940263998127733,
+      "false_alert_rate": 0.01115733736762481
+    }
+  },
+  "leakage": {
+    "naive_random_split_with_duplicates": {
+      "precision": 0.8321273516642547,
+      "recall": 0.9012539184952978,
+      "f1": 0.8653122648607976,
+      "pr_auc": 0.9490096773826613,
+      "roc_auc": 0.9932002019718708,
+      "false_alert_rate": 0.021751359459966247
+    },
+    "dedup_template_grouped_split": {
+      "precision": 0.8308457711442786,
+      "recall": 0.9226519337016574,
+      "f1": 0.8743455497382199,
+      "pr_auc": 0.9517625424357131,
+      "roc_auc": 0.9941486405162111,
+      "false_alert_rate": 0.019288956127080183
+    }
+  },
+  "conformal": {
+    "0.01": {
+      "target_fpr": 0.01,
+      "observed_fpr_mean": 0.009828467441004978,
+      "observed_fpr_p90": 0.01338099445738614,
+      "recall_mean": 0.852040806320888
+    },
+    "0.02": {
+      "target_fpr": 0.02,
+      "observed_fpr_mean": 0.01965175704600049,
+      "observed_fpr_p90": 0.027051094691123646,
+      "recall_mean": 0.9220556058663687
+    },
+    "0.05": {
+      "target_fpr": 0.05,
+      "observed_fpr_mean": 0.054056028843832385,
+      "observed_fpr_p90": 0.06626779983550775,
+      "recall_mean": 0.9737109043079538
+    }
+  },
+  "robustness_recall_at_alpha_0.02": {
+    "raw": {
+      "clean": 0.9270316597335821,
+      "zero-width": 0.8746594598224002,
+      "look-alike letters": 0.8941139038465993,
+      "leetspeak": 0.8902593185342134,
+      "letter spacing": 0.8690264481172821,
+      "prompt injection": 0.909267272601981
+    },
+    "guarded": {
+      "clean": 0.9287433647849456,
+      "zero-width": 0.9287433647849456,
+      "look-alike letters": 0.9287433647849456,
+      "leetspeak": 0.9287433647849456,
+      "letter spacing": 0.922617112305257,
+      "prompt injection": 1.0
+    }
+  },
+  "latency_ms_per_message": 0.24205238999998074,
+  "injection_detector_false_trigger_on_real_ham": 0.0,
+  "pii_redaction_recall": {
+    "PHONE": 1.0,
+    "UPI": 1.0,
+    "AADHAAR": 1.0,
+    "PAN": 1.0,
+    "CARD": 1.0,
+    "OTP": 1.0,
+    "ACCOUNT": 1.0,
+    "EMAIL": 1.0
+  },
+  "pii_redaction_recall_full_chain": {
+    "PHONE": 1.0,
+    "UPI": 1.0,
+    "AADHAAR": 1.0,
+    "PAN": 1.0,
+    "CARD": 1.0,
+    "OTP": 1.0,
+    "ACCOUNT": 1.0,
+    "EMAIL": 1.0
+  },
+  "unseen_injection": {
+    "unseen_injection_detected": 0.0,
+    "recall_clean": 0.8921568627450981,
+    "recall_with_unseen_injection": 0.8921568627450981
+  }
+}

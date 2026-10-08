@@ -1,0 +1,6 @@
+scikit-learn>=1.4
+pandas
+numpy
+scipy
+matplotlib
+pydantic>=2
