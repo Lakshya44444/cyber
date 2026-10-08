@@ -20,7 +20,7 @@ import os
 SEED, N_USERS, SCAM_RATE = 5, int(os.environ.get("N_USERS", 16000)), 0.15
 SIM_KNOBS = {k: float(os.environ.get(k.upper(), 1.0)) for k in ("signal", "share", "hard")}
 OUT = os.environ.get("OUT", "results/journey.json")
-A1, A2, A3 = 0.10, 0.02, 0.005          # tier budgets (false-alert rate on genuine payments)
+A1, A2, A3 = 0.03, 0.02, 0.005          # tier budgets (false-alert rate on genuine payments); T1 is a passive line
 rng = random.Random(SEED)
 R = {"setup": {"users": N_USERS, "scam_user_share_in_sim": SCAM_RATE,
                "alpha_T1": A1, "alpha_T2": A2, "alpha_T3": A3}}
@@ -32,6 +32,8 @@ tr_i, sim_i = next(GroupShuffleSplit(1, test_size=0.4, random_state=SEED)
 mtrain, msim = df.iloc[tr_i], df.iloc[sim_i]
 mm = MessageModel("logreg").fit(mtrain["text"].values, mtrain["is_smish"].values)
 pools = {k: msim.loc[msim["label"] == k, "text"].tolist() for k in ["smishing", "ham", "spam"]}
+if os.environ.get("AI_TEXTS") == "1":   # AI-enabled stress test: every scam message is an LLM-written variant
+    pools["smishing"] = json.load(open("data/ai_variants.json"))["scam"]
 R["setup"]["held_out_texts_used_in_journeys"] = {k: len(v) for k, v in pools.items()}
 
 # ---------------------------------------------- 2. simulate journeys
@@ -115,7 +117,7 @@ m, cols = fitted["ScamTrail (full)"]
 s_ca, s_te = m.predict_proba(CA[cols])[:, 1], m.predict_proba(TE[cols])[:, 1]
 
 
-def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA, two_family_from=2):
+def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA, two_family_from=3):
     groups = df["_group"].values if mondrian else np.array(["all"] * len(df))
     cgroups = cal["_group"].values if mondrian else np.array(["all"] * len(cal))
     th = {}
@@ -133,30 +135,68 @@ def tiers(scores, df, mondrian=True, two_family=True, cal_scores=s_ca, cal=CA, t
     return tier
 
 
-T = tiers(s_te, TE)
-R["decision"] = evaluate(T >= 2, TE)
+T = tiers(s_te, TE)                     # DEFAULT: Mondrian thresholds, two-family rule on Tier-3 holds
+R["decision"] = {"T2_or_higher_prompt": evaluate(T >= 2, TE), "T3_hold": evaluate(T >= 3, TE),
+                 "T1_or_higher_any_ui": evaluate(T >= 1, TE)}
 R["ablations"] = {
-    "full decision (Mondrian + two-family)": R["decision"],
-    "no_mondrian (one global threshold)": evaluate(tiers(s_te, TE, mondrian=False) >= 2, TE),
-    "no_two_family_rule": evaluate(tiers(s_te, TE, two_family=False) >= 2, TE),
+    "default (two-family on holds only)": R["decision"]["T2_or_higher_prompt"],
+    "two-family on every tier >= 2": evaluate(tiers(s_te, TE, two_family_from=2) >= 2, TE),
+    "no two-family rule at all": evaluate(tiers(s_te, TE, two_family=False) >= 2, TE),
+    "no Mondrian (one global threshold)": evaluate(tiers(s_te, TE, mondrian=False) >= 2, TE),
 }
-R["ablations"]["mondrian_only (no two-family)"] = R["ablations"]["no_two_family_rule"]
-R["ablations"]["two-family rule only for T3 holds"] = evaluate(tiers(s_te, TE, two_family_from=3) >= 2, TE)
-# hold-level view: Tier 3 (payment held) is where friction is costly
-T3only = tiers(s_te, TE, two_family_from=3)
-R["holds_T3"] = {"two_family_all_tiers": evaluate(T >= 3, TE), "two_family_T3_only": evaluate(T3only >= 3, TE)}
-R["ablations"]["global_only (no two-family)"] = evaluate(tiers(s_te, TE, mondrian=False, two_family=False) >= 2, TE)
-# works without messages: user never shares anything at test time
+R["holds_ablation"] = {"T3 with two-family": R["decision"]["T3_hold"],
+                       "T3 without two-family": evaluate(tiers(s_te, TE, two_family=False) >= 3, TE)}
+# floor: the user never shares a single message
 TEn = TE.copy()
 TEn["msg_risk_session"] = 0.0
 TEn["s1"] = 0.0
-R["ablations"]["no messages shared at all"] = evaluate(tiers(m.predict_proba(TEn[cols])[:, 1], TEn) >= 2, TEn)
+Tn = tiers(m.predict_proba(TEn[cols])[:, 1], TEn)
+R["no_messages_shared"] = {"T2_or_higher_prompt": evaluate(Tn >= 2, TEn), "T3_hold": evaluate(Tn >= 3, TEn)}
 
+# ---- alert fatigue: how often does a GENUINE user see anything, per month?
+g = TE["_y"].values == 0
+months = 1.0  # simulated window is 30 days
+per_user = TE[g].assign(t1=(T[g] >= 1), t2=(T[g] >= 2), t3=(T[g] >= 3)).groupby("_user")[["t1", "t2", "t3"]].sum()
+all_genuine_users = TE.loc[g, "_user"].unique()
+per_user = per_user.reindex(all_genuine_users, fill_value=0)
+R["alert_fatigue_genuine_user_per_month"] = {
+    "scored_payments_per_user": float(TE[g].groupby("_user").size().mean()),
+    "passive_T1_lines_mean": float(per_user["t1"].mean() - per_user["t2"].mean()),
+    "T2_prompts_mean": float(per_user["t2"].mean() - per_user["t3"].mean()),
+    "T3_holds_mean": float(per_user["t3"].mean()),
+    "share_users_with_zero_prompts_or_holds": float((per_user["t2"] == 0).mean()),
+}
+
+# ---- operating sheet at realistic prevalence (rates measured here, prevalence assumed)
+def ops(rec, far, per_day=1_000_000, prev=1e-4):
+    scams = per_day * prev
+    tp, fp = scams * rec, (per_day - scams) * far
+    return {"flagged_per_day": tp + fp, "scams_caught_per_day": tp, "precision": tp / (tp + fp)}
+d2, d3 = R["decision"]["T2_or_higher_prompt"], R["decision"]["T3_hold"]
+R["ops_sheet_1M_scored_payments_per_day"] = {
+    f"prevalence_{p}": {"T2_prompt": ops(d2["scam_payment_recall"], d2["false_alert_rate_genuine"], prev=p),
+                        "T3_hold": ops(d3["scam_payment_recall"], d3["false_alert_rate_genuine"], prev=p)}
+    for p in (1e-4, 1e-3)}
+
+# ---- "smart lag": RBI's proposed blanket 1-hour lag on new payees above Rs 10k
+scope = ((TE["new_payee"] == 1) & (TE["_amount"] > 10000)).values
+ys = TE["_y"].values.astype(bool)
+sc_in, ys_in = s_te[scope], ys[scope]
+smart = {"scope_share_of_scam_payments": float(ys_in.sum() / ys.sum()),
+         "scope_share_of_genuine_payments": float((~ys_in).sum() / (~ys).sum())}
+for keep in (0.95, 0.90):
+    thr_k = np.quantile(sc_in[ys_in], 1 - keep)
+    smart[f"keep_{int(keep*100)}pct_of_blanket_catches"] = {
+        "genuine_in_scope_released_instantly": float((sc_in[~ys_in] < thr_k).mean())}
+R["smart_lag"] = smart
 R["tier_distribution"] = {
     "genuine": {f"T{k}": float((T[TE["_y"].values == 0] == k).mean()) for k in range(4)},
     "scam": {f"T{k}": float((T[TE["_y"].values == 1] == k).mean()) for k in range(4)},
 }
-R["recall_by_scam_type"] = {lab: float((T[(TE["_label"] == lab).values & (TE["_y"] == 1).values] >= 2).mean())
+R["recall_by_scam_type"] = {lab: {"T2": float((T[(TE["_label"] == lab).values & (TE["_y"] == 1).values] >= 2).mean()),
+                                  "T3": float((T[(TE["_label"] == lab).values & (TE["_y"] == 1).values] >= 3).mean()),
+                                  "journeys_with_a_T3_hold": float(TE.assign(h=T >= 3).query("_y == 1 and _label == @lab")
+                                                                   .groupby("_user")["h"].any().mean())}
                             for lab in ["task_scam", "digital_arrest", "kyc_scam"]}
 
 # latency: one PIN-screen decision = feature row -> score -> tier
@@ -167,7 +207,7 @@ for _ in range(300):
 R["latency_ms_per_decision"] = float((time.perf_counter() - t0) / 300 * 1e3)
 
 # ---------------------------------------------- 4. reasons (occlusion) -> explanation -> guard
-REASON_OF = {"on_call": "on_call", "call_minutes": "on_call", "call_unknown": "on_call", "s2": "on_call",
+REASON_OF = {"on_call": "on_call", "voip_call": "on_call", "n_pay_on_call_7d": "on_call", "s2": "on_call",
              "new_payee": "new_payee", "amount_ratio": "amount_high", "log_amount": "amount_high",
              "remote_app_2h": "remote_app", "msg_risk_session": "msg_scam_like", "s1": "msg_scam_like",
              "secs_to_pin": "fast_pin", "n_newpayee_7d": "repeat_loop", "growth": "repeat_loop",
@@ -224,17 +264,19 @@ rt = pd.DataFrame(red, columns=["case", "ok"])
 R["explanation_guard"] = {c: float(g["ok"].mean()) for c, g in rt.groupby("case")}
 R["explanation_guard_note"] = "'good' = share of valid explanations allowed through; others = share of bad ones blocked"
 
+R["holds_T3"] = {"two_family_T3_only": R["decision"]["T3_hold"]}
 json.dump(R, open(OUT, "w"), indent=2, default=float)
 summ = {k: {kk: round(vv, 3) for kk, vv in v.items() if not isinstance(vv, dict)} for k, v in R["methods"].items()}
 print(json.dumps(R["setup"], indent=1))
 print(pd.DataFrame(summ).T.to_string())
-print("decision:", {k: (round(v, 4) if not isinstance(v, dict) else v) for k, v in R["decision"].items()})
+print("decision:", json.dumps({k: {kk: round(vv, 4) for kk, vv in v.items() if not isinstance(vv, dict)} for k, v in R["decision"].items()}, indent=1))
+print("fatigue:", R["alert_fatigue_genuine_user_per_month"]); print("ops:", json.dumps(R["ops_sheet_1M_scored_payments_per_day"], indent=1, default=float)); print("smart lag:", R["smart_lag"])
 print("ablations:", json.dumps({k: {kk: round(vv, 3) for kk, vv in v.items() if not isinstance(vv, dict)} for k, v in R["ablations"].items()}, indent=1))
 print("tiers:", R["tier_distribution"])
 print("by type:", R["recall_by_scam_type"])
 print("latency ms:", R["latency_ms_per_decision"])
 print("guard:", R["explanation_guard"])
-for k in ["no_mondrian (one global threshold)", "full decision (Mondrian + two-family)"]:
+for k in ["no Mondrian (one global threshold)", "default (two-family on holds only)"]:
     print("groups", k, {g: round(v, 4) for g, v in R["ablations"][k]["false_alert_by_group"].items()})
 for e in examples:
     print(e)

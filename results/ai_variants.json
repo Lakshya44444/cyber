@@ -1,0 +1,30 @@
+{
+  "n_ai_scam": 50,
+  "n_ai_legit": 10,
+  "message_level": {
+    "public_only": {
+      "classic_indian_probes": 0.30485436893203877,
+      "ai_written_scams": 0.21600000000000003,
+      "ai_legit_lookalikes_flagged": 0.31
+    },
+    "india_templates": {
+      "classic_indian_probes": 0.7106796116504854,
+      "ai_written_scams": 0.366,
+      "ai_legit_lookalikes_flagged": 0.16000000000000003
+    }
+  },
+  "journey_level": {
+    "classic_scam_texts": {
+      "T2_recall": 0.9069660861594867,
+      "T2_false_alert": 0.01983010214717532,
+      "T3_recall": 0.5123739688359303,
+      "single_sms_recall": 0.07424381301558204
+    },
+    "ai_written_scam_texts": {
+      "T2_recall": 0.8972235752557234,
+      "T2_false_alert": 0.019112079249001608,
+      "T3_recall": 0.4339990258158792,
+      "single_sms_recall": 0.08767657087189479
+    }
+  }
+}

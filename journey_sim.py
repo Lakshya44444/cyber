@@ -80,7 +80,7 @@ class Simulator:
             t = r.uniform(0, days * 24)
             unknown = r.random() < .3
             dur = r.uniform(5, 45) if (unknown and r.random() < .25) else r.uniform(1, 25)
-            j.events.append(Event(t, "call", {"dur": dur, "unknown": unknown}))
+            j.events.append(Event(t, "call", {"dur": dur, "unknown": unknown, "voip": r.random() < .4}))
             if unknown and r.random() < .3:
                 j.events.append(Event(t, "contact", {"unknown": True}))
         if r.random() < .35:              # cashback, refunds, friends paying back
@@ -102,14 +102,14 @@ class Simulator:
         t = r.uniform(5 * 24, end - 1)
         m = j.median_amt
         if kind == "hospital_on_family_call":
-            j.events.append(Event(t - .3, "call", {"dur": r.uniform(20, 60), "unknown": False}))
+            j.events.append(Event(t - .3, "call", {"dur": r.uniform(20, 60), "unknown": False, "voip": r.random() < .5}))
             j.events.append(self._pay(t, m * r.uniform(8, 30), True, fast=r.random() < .5))
         elif kind == "rent_deposit_new_landlord":
             if r.random() < .5:
-                j.events.append(Event(t - .1, "call", {"dur": r.uniform(5, 20), "unknown": True}))
+                j.events.append(Event(t - .1, "call", {"dur": r.uniform(5, 20), "unknown": True, "voip": r.random() < .3}))
             j.events.append(self._pay(t, m * r.uniform(6, 20), True))
         elif kind == "relative_with_son_on_call":
-            j.events.append(Event(t - .5, "call", {"dur": r.uniform(30, 70), "unknown": False}))
+            j.events.append(Event(t - .5, "call", {"dur": r.uniform(30, 70), "unknown": False, "voip": r.random() < .6}))
             j.events.append(self._pay(t, m * r.uniform(3, 12), True))
         elif kind == "registered_broker":
             j.events.append(self._msg(t - 48, self.spam_texts, .5))
@@ -134,7 +134,7 @@ class Simulator:
         amt = r.uniform(800, 3000)
         for k in range(r.randint(3, 6)):            # loop S3 -> S4 with growing amounts
             if P(.35):
-                j.events.append(Event(t - .2, "call", {"dur": r.uniform(10, 60), "unknown": True}))
+                j.events.append(Event(t - .2, "call", {"dur": r.uniform(10, 60), "unknown": True, "voip": r.random() < .8}))
             if k and r.random() < .3:
                 j.events.append(self._msg(t - 1, self.scam_texts, .3 * sh, .3))
             j.events.append(self._pay(t, amt, new_payee=P(.7), reported=P(.1),
@@ -151,7 +151,9 @@ class Simulator:
         if r.random() < .3:
             j.events.append(self._msg(t0 + .05, self.scam_texts, .35 * sh, .2))
         dur = r.uniform(60, 240)
-        j.events.append(Event(t0 + .05, "call", {"dur": dur, "unknown": True, "video": P(1.0)}))
+        j.events.append(Event(t0 + .05, "call", {"dur": dur, "unknown": True, "video": P(1.0), "voip": True}))
+        if P(.4):                                   # "share your screen so the officer can verify"
+            j.events.append(Event(t0 + .3, "app", {"remote": True}))
         for k in range(r.randint(1, 2)):
             j.events.append(self._pay(t0 + .5 + k * .4, j.median_amt * r.uniform(10, 60), P(1.0),
                                       reported=P(.1), fast=P(.4), scam=True))
@@ -163,7 +165,7 @@ class Simulator:
         if r.random() < .6:
             j.events.append(Event(t0 + .2, "contact", {"unknown": True}))
         if P(.6):
-            j.events.append(Event(t0 + .3, "call", {"dur": r.uniform(15, 50), "unknown": True}))
+            j.events.append(Event(t0 + .3, "call", {"dur": r.uniform(15, 50), "unknown": True, "voip": r.random() < .3}))
         if P(.5):
             j.events.append(Event(t0 + .4, "app", {"remote": True}))
         j.events.append(self._pay(t0 + .6, j.median_amt * r.uniform(2, 25), P(1.0),

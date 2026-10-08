@@ -18,9 +18,10 @@ for sig, sh, hd in GRID:
     J = json.load(open(f))
     row = {"signal": sig, "share": sh, "hard": hd,
            "recall": {k: v["scam_payment_recall"] for k, v in J["methods"].items()},
+           "T2_prompt_recall": J["decision"]["T2_or_higher_prompt"]["scam_payment_recall"],
            "false_alert": {k: v["false_alert_rate_genuine"] for k, v in J["methods"].items()},
            "hard_neg_false_alert": {k: v["false_alert_rate_hard_negatives"] for k, v in J["methods"].items()},
-           "T3_hold": {k: J["holds_T3"]["two_family_T3_only"][k] for k in
+           "T3_hold": {k: J["decision"]["T3_hold"][k] for k in
                        ["scam_payment_recall", "false_alert_rate_genuine", "scam_journeys_flagged"]}}
     out.append(row)
     print(sig, sh, hd, {k[:12]: round(v, 3) for k, v in row["recall"].items()}, flush=True)

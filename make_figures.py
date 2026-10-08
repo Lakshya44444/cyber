@@ -127,3 +127,32 @@ if os.path.exists("results/sensitivity.json"):
              fontsize=9, color=INK2)
     save(fig, "fig_sensitivity")
 print("ok2")
+
+# 6. AI-written scams: message model drops, journey decision holds
+if os.path.exists("results/ai_variants.json"):
+    A = json.load(open("results/ai_variants.json"))
+    ml, jl = A["message_level"]["india_templates"], A["journey_level"]
+    pairs = [("Message model alone\n(India templates)", ml["classic_indian_probes"], ml["ai_written_scams"]),
+             ("ScamTrail Tier-2\n(journey)", jl["classic_scam_texts"]["T2_recall"], jl["ai_written_scam_texts"]["T2_recall"]),
+             ("ScamTrail Tier-3 hold\n(journey)", jl["classic_scam_texts"]["T3_recall"], jl["ai_written_scam_texts"]["T3_recall"])]
+    fig, ax = plt.subplots(figsize=(7.6, 3.8))
+    for i, (lab, a, b) in enumerate(pairs):
+        ax.plot([b * 100, a * 100], [i, i], color="#CBD2D9", lw=3, zorder=1)
+        ax.scatter(a * 100, i, s=120, color=GRAY, zorder=2, edgecolor="white", linewidth=2, label="Classic scam text" if i == 0 else None)
+        ax.scatter(b * 100, i, s=120, color=ORANGE, zorder=3, edgecolor="white", linewidth=2, label="AI-written scam text" if i == 0 else None)
+        close = abs(a - b) < .08
+        ax.text(a * 100 + (3 if close else 0), i - .2 if close else i + .3, f"{a*100:.0f}%", fontsize=11, color=INK2,
+                ha="left" if close else "center")
+        ax.text(b * 100 - (3 if close else 0), i + .3, f"{b*100:.0f}%", fontsize=11, color=ORANGE,
+                ha="right" if close else "center", fontweight="bold")
+    ax.set_yticks(range(3)); ax.set_yticklabels([p[0] for p in pairs]); ax.invert_yaxis()
+    ax.set_xlim(0, 105); ax.set_xlabel("Scams caught at the same 2% false-alert budget (%)")
+    ax.tick_params(axis="y", length=0)
+    ax.set_ylim(2.6, -0.5)
+    ax.legend(frameon=False, loc="center left", fontsize=11)
+    fig.suptitle("AI-written scams beat the message model, not the journey", x=0.02, ha="left", y=1.0,
+                 fontsize=14, color=NAVY, fontweight="bold")
+    fig.text(0.0, -0.08, "50 fluent, personalised, code-mixed LLM-written scams (evaluation only). Journey: simulated benchmark.",
+             fontsize=9.5, color=INK2)
+    save(fig, "fig_ai_variants")
+print("ok3")
